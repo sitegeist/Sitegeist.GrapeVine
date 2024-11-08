@@ -1,0 +1,37 @@
+{
+    "description": "",
+    "type": "neos-package",
+    "name": "sitegeist/grapevine",
+    "require": {
+        "neos/neos": "^8.3"
+    },
+    "license": "GPL-3.0-or-later",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^1.8",
+        "squizlabs/php_codesniffer": "^3.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sitegeist\\GrapeVine\\": "Classes/"
+        }
+    },
+    "scripts": {
+        "fix:style": "phpcbf --colors --standard=PSR12 Classes",
+        "test:style": "phpcs --colors -n --standard=PSR12 Classes",
+        "test:stan": "phpstan -v analyse Classes",
+        "cc": "phpstan clear cache",
+        "fix": ["composer fix:style"],
+        "test": ["composer test:style" , "composer test:stan"]
+    },
+    "extra": {
+        "neos": {
+            "package-key": "Sitegeist.GrapeVine"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "neos/composer-plugin": true
+        }
+    }
+}

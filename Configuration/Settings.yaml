@@ -1,0 +1,25 @@
+Neos:
+#  Flow:
+#    aop:
+#      globalObjects:
+#        grapevineSecurityContext: 'Sitegeist\GrapeVine\Security\GrapevineSecurityContext'
+  Neos:
+    modules:
+      management:
+        submodules:
+          messages:
+            label: 'Messages'
+            description: 'Show and alter messages'
+            icon: 'icon-bullhorn'
+            controller: 'Sitegeist\GrapeVine\Controller\MessageController'
+            privilegeTarget: 'Sitegeist.GrapeVine:MessageModule.Show'
+            actions:
+              list:
+                label: "List all messages"
+                title: "List all messages"
+              index:
+                label: "Login Notifications"
+                title: "Login Notifications"
+
+      # moduleConfiguration:
+      preferredStartModules: [ 'management/messages', 'content', 'user/usersettings']

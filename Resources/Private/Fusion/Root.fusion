@@ -1,0 +1,84 @@
+include: resource://Neos.Fusion/Private/Fusion/Root.fusion
+
+Sitegeist.GrapeVine.MessageController.index = Sitegeist.GrapeVine:LoginNotification
+Sitegeist.GrapeVine.MessageController.list = Sitegeist.GrapeVine:MessageList
+Sitegeist.GrapeVine.MessageController.show = Sitegeist.GrapeVine:MessageShow
+
+prototype(Sitegeist.GrapeVine:LoginNotification) < prototype(Neos.Fusion:Component) {
+    notifications = ${notifications}
+
+    renderer = afx`
+        <h1>LOGIN NOTIFICATIONS</h1>
+        <table class="neos-table">
+            <thead>
+            <tr>
+                <td>Title</td>
+                <td>Message</td>
+                <td>Recipient roles</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody>
+            <Neos.Fusion:Loop items={props.notifications} itemName="notification">
+                <tr>
+                    <td>{notification.message.title}</td>
+                    <td>{notification.message.text}</td>
+                    <td>{notification.message.recipientRoleIdentifier}</td>
+                    <td>
+                        <Neos.Fusion:Link.Action
+                            href.action="show"
+                            href.arguments.message={notification.message}
+                        >
+                            Show
+                        </Neos.Fusion:Link.Action>
+                    </td>
+                </tr>
+            </Neos.Fusion:Loop>
+            </tbody>
+        </table>
+    `
+}
+
+prototype(Sitegeist.GrapeVine:MessageList) < prototype(Neos.Fusion:Component) {
+    messages = ${messages}
+
+    renderer = afx`
+        <table class="neos-table">
+            <thead>
+                <tr>
+                    <td>Title</td>
+                    <td>Message</td>
+                    <td>Recipient roles</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <Neos.Fusion:Loop items={props.messages} itemName="message">
+                <tr>
+                    <td>{message.title}</td>
+                    <td>{message.text}</td>
+                    <td>{message.recipientRoleIdentifier}</td>
+                    <td>
+                        <Neos.Fusion:Link.Action
+                            href.action="show"
+                            href.arguments.message={message}
+                        >
+                            Show
+                        </Neos.Fusion:Link.Action>
+                    </td>
+                </tr>
+                </Neos.Fusion:Loop>
+            </tbody>
+        </table>
+    `
+}
+
+prototype(Sitegeist.GrapeVine:MessageShow) < prototype(Neos.Fusion:Component) {
+    message = ${message}
+
+    renderer = afx`
+        <h1>{props.message.title}</h1>
+        <pre>{props.message.text}</pre>
+        <pre>{props.message.recipeintRoleIdentifier}</pre>
+    `
+}

@@ -34,20 +34,16 @@ class MessageCommandController extends CommandController
      *
      * @param string $title
      * @param string $text
-     * @param array $recipient
+     * @param string $role
      */
-    public function addCommand(string $title, string $text, array $recipient = [], bool $notify = false): void
+    public function addCommand(string $title, string $text, string $role = 'Neos.Neos:Editor', bool $notify = true): void
     {
-
-        $roles = array_map(
-            fn(string $roleId) => $this->policyService->getRole($roleId),
-            $recipient
-        );
+        $roleObject = $this->policyService->getRole($role);
 
         $message = new Message();
         $message->setTitle($title);
         $message->setText($text);
-        $message->setRecipientRoles($recipient);
+        $message->setRecipientRoleIdentifier($roleObject->getIdentifier());
         $message->setDate(new \DateTimeImmutable());
 
         $this->messageRepository->add($message);
@@ -57,16 +53,15 @@ class MessageCommandController extends CommandController
              * @var Account[] $accountsToNotify
              */
             $accountsToNotify = [];
-            foreach ($roles as $role) {
-                /**
-                 * @var Account[] $accounts
-                 * @phpstan-ignore method.notFound
-                 */
-                $accounts = $this->accountRepository->findByRoleIdentifiers($role->getIdentifier());
-                foreach ($accounts as $account) {
-                    $id = $this->persistenceManager->getIdentifierByObject($account);
-                    $accountsToNotify[$id] = $account;
-                }
+
+            /**
+             * @var Account[] $accounts
+             * @phpstan-ignore method.notFound
+             */
+            $accounts = $this->accountRepository->findByRoleIdentifiers($roleObject->getIdentifier());
+            foreach ($accounts as $account) {
+                $id = $this->persistenceManager->getIdentifierByObject($account);
+                $accountsToNotify[$id] = $account;
             }
 
             foreach ($accountsToNotify as $account) {
@@ -88,12 +83,12 @@ class MessageCommandController extends CommandController
                     (strlen($message->getText()) > 20)
                         ? substr($message->getText(), 0, 20) . ' ...'
                         : $message->getText(),
-                    implode(', ', $message->getRecipientRoles()),
+                    $message->getRecipientRoleIdentifier(),
                     $message->getDate()->format('Y-m-d H:i:s'),
                 ],
                 iterator_to_array($messages)
             ),
-            ['Title', 'Text', 'Recipients', 'Date']
+            ['Title', 'Text', 'Recipient role', 'Date']
         );
     }
 

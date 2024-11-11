@@ -31,10 +31,9 @@ class Message
     protected $date;
 
     /**
-     * @ORM\Column(type="simple_array", nullable=true)
-     * @var array<string>
+     * @var string
      */
-    protected $recipientRoles;
+    protected $recipientRoleIdentifier;
 
     /**
      * @var Account|null
@@ -80,20 +79,14 @@ class Message
         $this->date = $date;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getRecipientRoles(): array
+    public function getRecipientRoleIdentifier(): string
     {
-        return $this->recipientRoles;
+        return $this->recipientRoleIdentifier;
     }
 
-    /**
-     * @param string[] $recipientRoles
-     */
-    public function setRecipientRoles(array $recipientRoles): void
+    public function setRecipientRoleIdentifier(string $recipientRoleIdentifier): void
     {
-        $this->recipientRoles = $recipientRoles;
+        $this->recipientRoleIdentifier = $recipientRoleIdentifier;
     }
 
     public function getAuthor(): ?Account

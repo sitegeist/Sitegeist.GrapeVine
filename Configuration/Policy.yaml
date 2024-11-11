@@ -1,0 +1,38 @@
+privilegeTargets:
+  'Neos\Neos\Security\Authorization\Privilege\ModulePrivilege':
+    'Sitegeist.GrapeVine:MessageModule.Show':
+      matcher: 'management/messages'
+#  'Neos\Flow\Security\Authorization\Privilege\Entity\Doctrine\EntityPrivilege':
+#
+#    'Sitegeist.GrapeVine:Messages.ShowAll':
+#      matcher: 'isType("Sitegeist\GrapeVine\Domain\Model\Message")'
+#
+#    'Sitegeist.GrapeVine:Messages.ShowForAssignedRoles':
+#      #matcher: 'isType("Sitegeist\GrapeVine\Domain\Model\Message") && property("recipientRoleIdentifier").in("context.grapevineSecurityContext.roleIdentifiers")'
+#      matcher: 'isType("Sitegeist\GrapeVine\Domain\Model\Message") && property("recipientRoleIdentifier").in("context.securityContext.roles")'
+#
+#    'Sitegeist.GrapeVine:Notifications.ShowAll':
+#      matcher: 'isType("Sitegeist\GrapeVine\Domain\Model\Notification")'
+#
+#    'Sitegeist.GrapeVine:Notifications.ShowOwn':
+#      matcher: 'isType("Sitegeist\GrapeVine\Domain\Model\Notification") && (property("account").equals("context.securityContext.account")) && property("account") != null'
+
+roles:
+  'Sitegeist.GrapeVine:Administrator':
+    label: "Message Administrator"
+    description: "Manage Messages and Notifications"
+    privileges: []
+#    privileges:
+#      - privilegeTarget: 'Sitegeist.GrapeVine:Messages.ShowAll'
+#        permission: GRANT
+#      - privilegeTarget: 'Sitegeist.GrapeVine:Notifications.ShowAll'
+#        permission: GRANT
+
+  'Neos.Neos:AbstractEditor':
+    privileges:
+      - privilegeTarget: 'Sitegeist.GrapeVine:MessageModule.Show'
+        permission: GRANT
+#      - privilegeTarget: 'Sitegeist.GrapeVine:Messages.ShowForAssignedRoles'
+#        permission: GRANT
+#      - privilegeTarget: 'Sitegeist.GrapeVine:Notifications.ShowOwn'
+#        permission: GRANT

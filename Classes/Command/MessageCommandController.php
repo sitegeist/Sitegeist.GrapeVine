@@ -30,8 +30,6 @@ class MessageCommandController extends CommandController
     }
 
     /**
-     * @phpstan-param string[] $recipient
-     *
      * @param string $title
      * @param string $text
      * @param string $role
@@ -56,7 +54,7 @@ class MessageCommandController extends CommandController
 
             /**
              * @var Account[] $accounts
-             * @phpstan-ignore method.notFound
+             * @phpstan-ignore-next-line
              */
             $accounts = $this->accountRepository->findByRoleIdentifiers($roleObject->getIdentifier());
             foreach ($accounts as $account) {

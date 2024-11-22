@@ -25,50 +25,50 @@ class MessageController extends AbstractModuleController
     protected $defaultViewObjectName = FusionView::class;
 
     public function __construct(
-        private readonly MessageRepository      $messageRepository,
+        private readonly MessageRepository $messageRepository,
         private readonly NotificationRepository $notificationRepository,
-        private readonly Context                $securityContext,
-        private readonly MenuHelper             $menuHelper
+        private readonly Context $securityContext,
     ) {
     }
 
     public function indexAction(): void
     {
-        $account = $this->securityContext->getAccount();
-        /**
-         * @var QueryResult $notifications
-         */
-        $notifications = $this->notificationRepository->findByAccount($account);
-        if ($notifications->count() === 0) {
-
-            $uriBuilder = new UriBuilder();
-            $uriBuilder->setRequest($this->request->getMainRequest());
-            $uri = $uriBuilder
-                ->reset()
-                ->setCreateAbsoluteUri(true)
-                ->uriFor('index', ['module' => 'content'], 'Backend\Module', 'Neos.Neos');
-            $this->redirectToUri($uri);
-        }
-        $this->view->assign('notifications', $notifications);
-    }
-
-    public function listAction(): void
-    {
         $this->securityContext->getRoles();
-        $this->view->assign('messages',
-            $this->messageRepository->findByRoleIdentifiers(
+        $this->view->assignMultiple([
+            'messages' => $this->messageRepository->findByRoleIdentifiers(
                 array_values(
                     array_map(
                         fn(Role $role) => $role->getIdentifier(),
                         $this->securityContext->getRoles()
                     )
                 )
+            ),
+            'notifications' => $this->notificationRepository->findByAccount(
+                $this->securityContext->getAccount(),
             )
-        );
+        ]);
     }
 
     public function showAction(Message $message): void
     {
+        $notification = null;
+        foreach ($message->getNotifications() as $messageNotification) {
+            if ($messageNotification->getAccount() === $this->securityContext->getAccount()) {
+                $notification = $messageNotification;
+            }
+        }
         $this->view->assign('message', $message);
+        $this->view->assign('notification', $notification);
+    }
+
+    public function confirmNotificationAction(Notification $notification): void
+    {
+        if ($this->securityContext->getAccount() !== $notification->getAccount()) {
+            throw new \Exception('forbidden access to foreign notifications');
+        }
+
+        $this->notificationRepository->remove($notification);
+        $this->persistenceManager->persistAll();
+        $this->forward('index');
     }
 }

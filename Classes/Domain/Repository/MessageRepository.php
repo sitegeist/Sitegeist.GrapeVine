@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sitegeist\GrapeVine\Domain\Repository;
 
 use Neos\Flow\Persistence\Doctrine\QueryResult;
+use Neos\Flow\Persistence\QueryResultInterface;
 use Neos\Flow\Persistence\Repository;
 use Neos\Flow\Annotations as Flow;
 
@@ -18,9 +19,9 @@ class MessageRepository extends Repository
 
     /**
      * @param string[] $roleIdentifiers
-     * @return QueryResult
+     * @return QueryResultInterface
      */
-    public function findByRoleIdentifiers(array $roleIdentifiers): QueryResult
+    public function findByRoleIdentifiers(array $roleIdentifiers): QueryResultInterface
     {
         $query = $this->createQuery();
         $query = $query->matching(

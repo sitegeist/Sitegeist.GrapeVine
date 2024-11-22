@@ -98,4 +98,20 @@ class Message
     {
         $this->author = $author;
     }
+
+    /**
+     * @return ArrayCollection<int, Notification>
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+    /**
+     * @param ArrayCollection<int, Notification> $notifications
+     */
+    public function setNotifications($notifications): void
+    {
+        $this->notifications = $notifications;
+    }
 }

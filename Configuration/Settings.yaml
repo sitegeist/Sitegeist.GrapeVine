@@ -13,13 +13,3 @@ Neos:
             icon: 'icon-bullhorn'
             controller: 'Sitegeist\GrapeVine\Controller\MessageController'
             privilegeTarget: 'Sitegeist.GrapeVine:MessageModule.Show'
-            actions:
-              list:
-                label: "List all messages"
-                title: "List all messages"
-              index:
-                label: "Login Notifications"
-                title: "Login Notifications"
-
-      # moduleConfiguration:
-      preferredStartModules: [ 'management/messages', 'content', 'user/usersettings']
